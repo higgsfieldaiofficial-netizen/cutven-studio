@@ -2,3 +2,5 @@
 .brand-logo{width:38px;height:38px;border-radius:50%;object-fit:cover;display:block;box-shadow:0 0 28px #ff222273}
 #ai-production .cat:hover{transform:translateY(-10px)}
 @media (width<=680px){#ai-production .cat{min-height:340px}#ai-production .cat-body{padding:20px 18px}#ai-production .cat-title{font-size:27px}#ai-production .cat-desc{font-size:13.5px}}
+
+.wcard.vert{aspect-ratio:9/16}.wcard:not(.playing) .wplay{opacity:1}.wcard.playing .wplay{opacity:0}.wcard.playing:hover .wplay{opacity:0}@media(hover:none){.cat .cat-bg::after{content:"▶";position:absolute;right:18px;bottom:18px;width:52px;height:52px;border-radius:50%;background:var(--ember);color:#0a0a0b;display:grid;place-items:center;font-size:18px;z-index:3}.cat.playing .cat-bg::after{display:none}}
