@@ -14,3 +14,62 @@
 .wdur:empty{display:none}
 .cat-bg:has(>video+video){display:flex}
 .cat-bg:has(>video+video) video{flex:1;min-width:0}
+
+/* === Coverflow 3D service cards (appended 2026-10-06) === */
+.cats{
+  display:flex;
+  gap:clamp(16px,3vw,32px);
+  overflow-x:auto;
+  overflow-y:clip;
+  scroll-snap-type:x mandatory;
+  padding:48px max(6vw,20px) 64px;
+  margin:0 auto;
+  max-width:none;
+  perspective:1400px;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  scroll-behavior:smooth;
+}
+.cats::-webkit-scrollbar{display:none}
+.cats>.reveal{
+  flex:0 0 auto;
+  scroll-snap-align:center;
+  display:flex;
+}
+.cats .cat{
+  width:min(360px,80vw);
+  rotate:0 1 0 calc(var(--cfx,0)*-30deg);
+  scale:calc(1 - var(--cfd,0)*.16);
+  filter:blur(calc(var(--cfd,0)*4px)) brightness(calc(1 - var(--cfd,0)*.32)) saturate(calc(1 - var(--cfd,0)*.25));
+  opacity:calc(1 - var(--cfd,0)*.2);
+  will-change:rotate,scale,filter;
+}
+@media (prefers-reduced-motion:reduce){
+  .cats{scroll-behavior:auto}
+  .cats .cat{rotate:none;scale:1;filter:none;opacity:1}
+}
+.cf-dots{display:flex;gap:10px;justify-content:center;margin:6px 0 0;padding:0}
+.cf-dot{width:8px;height:8px;border-radius:50%;background:#ffffff2e;border:none;cursor:pointer;padding:0;transition:background .3s,transform .3s}
+.cf-dot.is-on{background:#ff2222;transform:scale(1.35)}
+.cf-hint{display:flex;align-items:center;justify-content:center;gap:10px;color:#ffffffa6;font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 auto 2px;transition:opacity .4s;animation:cf-nudge 2.2s ease-in-out infinite}
+@keyframes cf-nudge{0%,100%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.cf-hint{animation:none}}
+/* Fix 2026-10-06: 3 reels on Reels card keep proper 9:16 ratio (not thin strips) — overrides the earlier 2-line rule by source order */
+.cat-bg:has(>video+video){
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:24px 14px;
+}
+.cat-bg:has(>video+video) video{
+  flex:1 1 0;
+  min-width:0;
+  width:auto;
+  height:auto;
+  aspect-ratio:9/16;
+  max-height:100%;
+  border-radius:14px;
+}
+/* Fix 2026-10-06: nav logo proper display — remove old red glow circle, keep natural aspect */
+.brand-logo{width:auto;height:38px;border-radius:0;object-fit:contain;box-shadow:none}
