@@ -1,0 +1,93 @@
+/* Coverflow 3D for Avryx service cards (.cats > .reveal > .cat)
+   - Sets --cfx/--cfd per card from scroll position (drives rotate/scale/blur in CSS)
+   - Clickable progress dots, visible swipe hint, first-view nudge
+   - Respects prefers-reduced-motion
+*/
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function init() {
+    var wrap = document.querySelector('.cats');
+    if (!wrap) return;
+    var cards = Array.prototype.slice.call(wrap.querySelectorAll('.cat'));
+    if (cards.length < 2) return;
+
+    /* ---- progress dots ---- */
+    var dotsBox = document.createElement('div');
+    dotsBox.className = 'cf-dots';
+    var dots = cards.map(function (card, i) {
+      var d = document.createElement('button');
+      d.className = 'cf-dot';
+      d.type = 'button';
+      d.setAttribute('aria-label', 'Go to card ' + (i + 1));
+      d.addEventListener('click', function () {
+        card.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+      });
+      dotsBox.appendChild(d);
+      return d;
+    });
+    wrap.parentNode.insertBefore(dotsBox, wrap.nextSibling);
+
+    /* ---- swipe hint ---- */
+    var hint = document.createElement('div');
+    hint.className = 'cf-hint';
+    hint.innerHTML = '<span>&larr;</span><span>swipe</span><span>&rarr;</span>';
+    wrap.parentNode.insertBefore(hint, wrap);
+    var hintGone = false;
+    function hideHint() {
+      if (hintGone) return;
+      hintGone = true;
+      hint.style.opacity = '0';
+      setTimeout(function () { if (hint.parentNode) hint.parentNode.removeChild(hint); }, 450);
+    }
+    setTimeout(hideHint, 6000);
+
+    /* ---- coverflow transform vars ---- */
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var wr = wrap.getBoundingClientRect();
+      var cx = wr.left + wr.width / 2;
+      var active = 0, best = Infinity;
+      cards.forEach(function (card, i) {
+        var r = card.getBoundingClientRect();
+        var ccx = r.left + r.width / 2;
+        var d = (ccx - cx) / (r.width * 0.9);
+        var cd = Math.max(-1, Math.min(1, d));
+        var ad = Math.abs(cd);
+        card.style.setProperty('--cfx', cd.toFixed(3));
+        card.style.setProperty('--cfd', ad.toFixed(3));
+        if (ad < best) { best = ad; active = i; }
+      });
+      dots.forEach(function (d, i) { d.classList.toggle('is-on', i === active); });
+    }
+    function onScroll() {
+      hideHint();
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
+    wrap.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    update();
+
+    /* ---- first-view nudge: proves the row scrolls ---- */
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+      var seen = false;
+      var io = new IntersectionObserver(function (entries) {
+        if (seen || !entries[0].isIntersecting) return;
+        seen = true;
+        io.disconnect();
+        setTimeout(function () {
+          var x0 = wrap.scrollLeft;
+          if (wrap.scrollWidth <= wrap.clientWidth + 4) return; // not scrollable
+          wrap.scrollTo({ left: x0 + 60, behavior: 'smooth' });
+          setTimeout(function () { wrap.scrollTo({ left: x0, behavior: 'smooth' }); }, 650);
+        }, 600);
+      }, { threshold: 0.4 });
+      io.observe(wrap);
+    }
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
