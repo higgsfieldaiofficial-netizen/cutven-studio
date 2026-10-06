@@ -84,6 +84,43 @@
 
     update();
 
+    /* ---- auto-scroll: next card every 3s, loops; pauses on user input ---- */
+    var autoTimer = null, idleTimer = null;
+    function currentIndex() {
+      var wr = wrap.getBoundingClientRect();
+      var cx = wr.left + wr.width / 2;
+      var best = 0, bestD = Infinity;
+      cards.forEach(function (card, i) {
+        var r = card.getBoundingClientRect();
+        var d = Math.abs((r.left + r.width / 2) - cx);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      return best;
+    }
+    function goTo(i) {
+      cards[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+    }
+    function startAuto() {
+      if (reduceMotion || autoTimer) return;
+      autoTimer = setInterval(function () { goTo((currentIndex() + 1) % cards.length); }, 3000);
+    }
+    function stopAuto() {
+      if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    }
+    function pauseForIdle() {
+      stopAuto();
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(startAuto, 6000);
+    }
+    wrap.addEventListener('pointerdown', pauseForIdle, { passive: true });
+    wrap.addEventListener('wheel', pauseForIdle, { passive: true });
+    wrap.addEventListener('touchstart', pauseForIdle, { passive: true });
+    dots.forEach(function (d) { d.addEventListener('click', pauseForIdle); });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stopAuto(); else pauseForIdle();
+    });
+    startAuto();
+
     /* ---- first-view nudge: proves the row scrolls ---- */
     if (!reduceMotion && 'IntersectionObserver' in window) {
       var seen = false;
