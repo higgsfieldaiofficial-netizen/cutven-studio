@@ -6,11 +6,25 @@
 (function () {
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function init() {
-    var wrap = document.querySelector('.cats');
-    if (!wrap) return;
+  function waitForCards(cb) {
+    var done = false, n = 0;
+    function tryInit() {
+      if (done) return;
+      var wrap = document.querySelector('.cats');
+      if (wrap && wrap.querySelectorAll('.cat').length >= 2) {
+        done = true;
+        cb(wrap);
+      }
+    }
+    tryInit();
+    var timer = setInterval(function () {
+      tryInit();
+      if (done || ++n > 120) clearInterval(timer);
+    }, 100);
+  }
+
+  function init(wrap) {
     var cards = Array.prototype.slice.call(wrap.querySelectorAll('.cat'));
-    if (cards.length < 2) return;
 
     /* ---- progress dots ---- */
     var dotsBox = document.createElement('div');
@@ -88,6 +102,5 @@
     }
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  waitForCards(init);
 })();
