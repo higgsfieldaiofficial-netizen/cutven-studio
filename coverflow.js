@@ -10,7 +10,7 @@
     var done = false, n = 0;
     function tryInit() {
       if (done) return;
-      var wrap = document.querySelector('.cats');
+      var wrap = document.querySelector('#categories .cats');
       if (wrap && wrap.querySelectorAll('.cat').length >= 2) {
         done = true;
         cb(wrap);
