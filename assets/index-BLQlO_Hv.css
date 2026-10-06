@@ -12,3 +12,5 @@
 .wmute{position:absolute;left:14px;bottom:14px;z-index:3;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#0a0a0bb8;color:#fff;font-size:17px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .wdur{position:absolute;right:14px;bottom:14px;z-index:3;background:#0a0a0bb8;border:1px solid var(--line);color:#fff;border-radius:100px;padding:6px 12px;font-size:12px;font-weight:700;letter-spacing:1px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .wdur:empty{display:none}
+.cat-bg:has(>video+video){display:flex}
+.cat-bg:has(>video+video) video{flex:1;min-width:0}
