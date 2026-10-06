@@ -77,3 +77,4 @@
 
 
 html,body{overflow-x:clip}
+#categories .cats{scroll-padding-inline:calc(50% - min(180px,40vw))}
