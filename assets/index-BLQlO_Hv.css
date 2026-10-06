@@ -51,6 +51,7 @@
 .cf-dots{display:flex;gap:10px;justify-content:center;margin:6px 0 0;padding:0}
 .cf-dot{width:8px;height:8px;border-radius:50%;background:#ffffff2e;border:none;cursor:pointer;padding:0;transition:background .3s,transform .3s}
 .cf-dot.is-on{background:#ff2222;transform:scale(1.35)}
+
 .cf-hint{display:flex;align-items:center;justify-content:center;gap:10px;color:#ffffffa6;font-size:13px;letter-spacing:.16em;text-transform:uppercase;margin:0 auto 2px;transition:opacity .4s;animation:cf-nudge 2.2s ease-in-out infinite}
 @keyframes cf-nudge{0%,100%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
 @media (prefers-reduced-motion:reduce){.cf-hint{animation:none}}
@@ -72,4 +73,6 @@
   border-radius:14px;
 }
 /* Fix 2026-10-06: nav logo proper display — remove old red glow circle, keep natural aspect */
-.brand-logo{width:auto;height:38px;border-radius:0;object-fit:contain;box-shadow:none}
+.brand-logo{width:auto;height:38px;border-radius:0;object-fit:contain;box-shadow:none}/* Fix 2026-10-06: coverflow only on #categories (What We Do); revert AI production to grid */#ai-production .cats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;overflow:visible;padding:0;margin:0;max-width:none;perspective:none;scroll-snap-type:none}#ai-production .cats>.reveal{display:block}#ai-production .cats .cat{width:auto;rotate:none;scale:1;filter:none;opacity:1;will-change:transform}#categories .cats{display:flex;gap:clamp(16px,3vw,32px);overflow-x:auto;overflow-y:clip;scroll-snap-type:x mandatory;padding:48px max(6vw,20px) 64px;margin:0 auto;max-width:none;perspective:1400px;scrollbar-width:none;-ms-overflow-style:none;scroll-behavior:smooth}#categories .cats::-webkit-scrollbar{display:none}#categories .cats>.reveal{flex:0 0 auto;scroll-snap-align:center;display:flex}#categories .cats .cat{width:min(360px,80vw);rotate:0 1 0 calc(var(--cfx,0)*-30deg);scale:calc(1 - var(--cfd,0)*.16);filter:blur(calc(var(--cfd,0)*4px)) brightness(calc(1 - var(--cfd,0)*.32)) saturate(calc(1 - var(--cfd,0)*.25));opacity:calc(1 - var(--cfd,0)*.2);will-change:rotate,scale,filter}
+
+
