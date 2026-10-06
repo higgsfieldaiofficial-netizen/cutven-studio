@@ -7,3 +7,5 @@
 .tcard.timg{display:block;padding:0}.tcard.timg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}.tcard.timg:hover img{transform:scale(1.05)}.wsoon{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--muted);font-size:15px;letter-spacing:2px;border:1px dashed var(--line);border-radius:20px}
 
 .cat.vprev .cat-art{opacity:0;transform:scale(1.06);pointer-events:none}.cat.vprev .cat-bg video{opacity:.85;transform:scale(1)}
+
+.tcard.timg{aspect-ratio:16/9}.tcard.timg img{border-radius:0;border:0}.cat.vprev .cat-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85}
