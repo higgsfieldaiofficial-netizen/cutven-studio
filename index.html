@@ -9,31 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="./assets/index-BJAaXyaM.js"></script>
-    <script src="./coverflow.js" defer></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CXG6b8lq.css">
+    <script type="module" crossorigin src="./assets/index-Dmpo9FVc.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-8B76OeyO.css">
   </head>
   <body>
     <div id="root"></div>
-    <script>
-    (function(){
-      function add(){
-        if(document.querySelector('.mw'))return;
-        var s=document.querySelector('.hero-stats');
-        if(!s){setTimeout(add,400);return;}
-        var d=document.createElement('div');
-        d.className='mw reveal';
-        d.innerHTML='<span class="mw-label">Videos made with</span><div class="mw-row">'
-        +'<div class="mw-badge"><span class="mw-tile mw-t-seedance">S<em>2.5</em></span><span class="mw-meta"><b>Seedance 2.5</b><i>AI Video Engine</i></span><span class="mw-shine"></span></div>'
-        +'<div class="mw-badge"><span class="mw-tile mw-t-pr">Pr</span><span class="mw-meta"><b>Premiere Pro</b><i>Editing</i></span><span class="mw-shine"></span></div>'
-        +'<div class="mw-badge"><span class="mw-tile mw-t-ae">Ae</span><span class="mw-meta"><b>After Effects</b><i>Motion Graphics</i></span><span class="mw-shine"></span></div>'
-        +'</div>';
-        s.after(d);
-        var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){d.classList.add('in');io.disconnect();}})},{threshold:.1});
-        io.observe(d);
-      }
-      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',add);else add();
-    })();
-    </script>
+    <script src="./coverflow.js" defer></script>
   </body>
 </html>
