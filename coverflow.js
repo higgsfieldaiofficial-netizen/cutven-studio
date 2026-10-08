@@ -161,3 +161,6 @@
   waitForCards(init);
 })();
 
+
+
+/* FIX 2026-10-08 (3): restore 3D coverflow styles lost in the CSS rebuild.    Injects the --cfx/--cfd transform rules + dots/hint styling. */ (function () {   var css = [     '#categories .cats{perspective:1400px;}',     '#categories .cats .cat{--cfx:0;--cfd:0;',     'transform:rotateY(calc(var(--cfx) * -28deg)) scale(calc(1 - var(--cfd) * 0.14));',     'filter:blur(calc(var(--cfd) * 2.5px)) brightness(calc(1 - var(--cfd) * 0.25));',     'transition:transform .35s ease,filter .35s ease;will-change:transform,filter;}',     '.cf-dots{display:flex;gap:8px;justify-content:center;margin-top:16px;}',     '.cf-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);border:none;padding:0;cursor:pointer;}',     '.cf-dot.is-on{background:#ff2222;}',     '.cf-hint{text-align:center;color:rgba(255,255,255,.5);font-size:12px;letter-spacing:2px;margin-bottom:8px;transition:opacity .4s;}'   ].join('\n');   var st = document.createElement('style');   st.id = 'cf-3d-restore';   st.textContent = css;   document.head.appendChild(st); })();
