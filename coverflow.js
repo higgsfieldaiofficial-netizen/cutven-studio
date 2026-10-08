@@ -24,7 +24,15 @@
   }
 
   function init(wrap) {
-    var cards = Array.prototype.slice.call(wrap.querySelectorAll('.cat'));
+        var cards = Array.prototype.slice.call(wrap.querySelectorAll('.cat'));
+
+    /* ---- horizontal-only centering: never scrolls the page vertically ---- */
+    function centerCard(i) {
+      var wr = wrap.getBoundingClientRect();
+      var r = cards[i].getBoundingClientRect();
+      var delta = (r.left + r.width / 2) - (wr.left + wr.width / 2);
+      wrap.scrollTo({ left: wrap.scrollLeft + delta, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
 
     /* ---- progress dots ---- */
     var dotsBox = document.createElement('div');
@@ -34,9 +42,7 @@
       d.className = 'cf-dot';
       d.type = 'button';
       d.setAttribute('aria-label', 'Go to card ' + (i + 1));
-      d.addEventListener('click', function () {
-        card.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
-      });
+      d.addEventListener('click', function () { centerCard(i); });
       dotsBox.appendChild(d);
       return d;
     });
@@ -84,8 +90,9 @@
 
     update();
 
-    /* ---- auto-scroll: next card every 3s, loops; pauses on user input ---- */
-    var autoTimer = null, idleTimer = null;
+    /* ---- auto-scroll: next card every 5s, loops; pauses on user input ----
+       Only advances while #categories is visible, so it never yanks the page up. */
+    var autoTimer = null, idleTimer = null, inView = true;
     function currentIndex() {
       var wr = wrap.getBoundingClientRect();
       var cx = wr.left + wr.width / 2;
@@ -97,12 +104,12 @@
       });
       return best;
     }
-    function goTo(i) {
-      cards[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
-    }
+    function goTo(i) { centerCard(i); }
     function startAuto() {
       if (reduceMotion || autoTimer) return;
-      autoTimer = setInterval(function () { goTo((currentIndex() + 1) % cards.length); }, 3000);
+      autoTimer = setInterval(function () {
+        if (inView) goTo((currentIndex() + 1) % cards.length);
+      }, 5000);
     }
     function stopAuto() {
       if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
@@ -116,6 +123,14 @@
     wrap.addEventListener('wheel', pauseForIdle, { passive: true });
     wrap.addEventListener('touchstart', pauseForIdle, { passive: true });
     dots.forEach(function (d) { d.addEventListener('click', pauseForIdle); });
+    if ('IntersectionObserver' in window) {
+      var sec = document.getElementById('categories');
+      if (sec) {
+        new IntersectionObserver(function (entries) {
+          inView = entries[0].isIntersecting;
+        }, { threshold: 0.15 }).observe(sec);
+      }
+    }
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) stopAuto(); else pauseForIdle();
     });
