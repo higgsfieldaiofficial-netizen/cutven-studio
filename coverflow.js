@@ -160,3 +160,25 @@
 
   waitForCards(init);
 })();
+/* FIX 2026-10-08 (2): mute all videos so mobile browsers allow autoplay.
+   Runs once on load and watches for videos added later. */
+(function () {
+  function muteAll(root) {
+    var vids = (root || document).querySelectorAll('video');
+    for (var i = 0; i < vids.length; i++) {
+      if (!vids[i].muted) { vids[i].muted = true; vids[i].setAttribute('muted', ''); }
+    }
+  }
+  muteAll(document);
+  if (window.MutationObserver) {
+    new MutationObserver(function (muts) {
+      for (var m = 0; m < muts.length; m++) {
+        var nodes = muts[m].addedNodes;
+        for (var n = 0; n < nodes.length; n++) {
+          if (nodes[n] && nodes[n].nodeType === 1) muteAll(nodes[n]);
+        }
+      }
+    }).observe(document.documentElement, { childList: true, subtree: true });
+  }
+})();
+
