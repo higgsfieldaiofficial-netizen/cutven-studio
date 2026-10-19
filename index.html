@@ -31,7 +31,7 @@
         +'<div class="mw-badge"><span class="mw-tile mw-t-ae">Ae</span><span class="mw-meta"><b>After Effects</b><i>Motion Graphics</i></span><span class="mw-shine"></span></div>'
         +'</div>';
         s.after(d);
-        var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){d.classList.add('in');io.disconnect();}});},{threshold:.1});
+        var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){d.classList.add('in');io.disconnect();}})},{threshold:.1});
         io.observe(d);
       }
       if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',add);else add();
